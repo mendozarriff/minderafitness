@@ -1,9 +1,13 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
+import { Container, Button } from 'react-bootstrap';
+import Navbar from './Navbar';
 
-function Main(){
-  
+function Home(){
+  const title = "choose body part";
+  const links = ['upper-body', 'lower-body','full-body', 'all'];
     return(
+      <div>
+      <Navbar title={title} links={links} /> 
       <div className="main">
         <div className="main_title">
           <h2>Choose Exercise</h2>
@@ -78,13 +82,23 @@ function Main(){
             </div>
             <div className="workout">
               <Container>
-
+                <h2>Your Workout</h2>
+                <ul>
+                  <li>Pull up</li>
+                  <li>Bent Over Row</li>
+                  <li>Dumbbell Shrug</li>
+                  <li>Dips</li>
+                  <li>Incline</li>
+                  <li>Dumbbell Press</li>
+                </ul>
+                <Button>START</Button>
               </Container>
             </div>
         </div>
+      </div>
       </div>
     )
 
 }
 
-export default Main;
+export default Home;

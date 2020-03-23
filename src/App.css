@@ -74,6 +74,30 @@ p.list_item_description{
   margin-bottom: 0!important;
 }
 
+.workout{
+  background: #161616;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.workout li{
+  list-style-type: decimal;
+  list-style-position: inside;
+}
+
+.workout button{
+  background: none;
+  border: white 2px solid;
+  padding: 5px 40px;
+}
+
+.workout button:hover{
+  background: white;
+  color: #161616;
+  border: #161616 2px solid;
+}
+
 @media only screen and (min-width: 500px){
   .navbar_list{
     display: flex;

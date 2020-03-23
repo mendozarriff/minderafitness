@@ -1,17 +1,19 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 
-function Navbar(){
-  
+function Navbar({title,links}){
     return(
       <div className="navbar" style={{background: "#D8D8D8"}}>
         <Container>
-        <h2>Choose Body Part</h2>
+        <h2>{title}</h2>
         <div className="navbar_list">
-        <p>Upper-body</p>
-        <p>Lower-body</p>
-        <p>Full-body</p>
-        <p>All</p>
+        <ul>
+        {links.length > 0 ? links.map((link,index)=>(
+          
+            <li key={index}>{link}</li>
+          
+        )):""}
+        </ul>
         </div>
         
         {/* <Row>
