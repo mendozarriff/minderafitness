@@ -97,7 +97,16 @@ p.list_item_description{
   color: #161616;
   border: #161616 2px solid;
 }
-
+.list_item{
+  width: 100%;
+}
+.list_item_description{
+  
+  white-space: nowrap; 
+  width: 50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 @media only screen and (min-width: 500px){
   .navbar_list{
     display: flex;
