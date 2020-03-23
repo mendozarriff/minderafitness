@@ -1,5 +1,6 @@
 import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
 function Navbar({title,links}){
     return(
@@ -8,23 +9,23 @@ function Navbar({title,links}){
         <h2>{title}</h2>
         <div className="navbar_list">
         <ul>
-        {links.length > 0 ? links.map((link,index)=>(
+        {links()}
+        {/* {links.length > 0 ? links.map((link,index)=>(
           
             <li key={index}>{link}</li>
           
-        )):""}
+        )):""} */}
         </ul>
         </div>
-        
-        {/* <Row>
-          <Col xs></Col>
-          <Col xs></Col>
-          <Col xs></Col>
-          <Col xs> </Col>
-        </Row> */}
         </Container>
       </div>
     )
+
+}
+
+Navbar.propTypes={
+  title: PropTypes.string.isRequired,
+  links: PropTypes.func.isRequired,
 
 }
 

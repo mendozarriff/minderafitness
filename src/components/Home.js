@@ -1,10 +1,20 @@
 import React from 'react';
 import { Container, Button } from 'react-bootstrap';
 import Navbar from './Navbar';
+import {Link} from "react-router-dom";
 
 function Home(){
   const title = "choose body part";
-  const links = ['upper-body', 'lower-body','full-body', 'all'];
+  const links =() => {
+    return (
+      <ul>
+        <li>upper-body</li>
+        <li>lower-body</li>
+        <li>full-body</li>
+        <li>all</li>
+      </ul>
+    )
+  }
     return(
       <div>
       <Navbar title={title} links={links} /> 
@@ -91,7 +101,8 @@ function Home(){
                   <li>Incline</li>
                   <li>Dumbbell Press</li>
                 </ul>
-                <Button>START</Button>
+                {/* <Button>START</Button> */}
+                <Link to='/workout'>START</Link>
               </Container>
             </div>
         </div>
