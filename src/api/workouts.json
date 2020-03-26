@@ -4,72 +4,86 @@
     {
       "name": "pull up",
       "type":"upper body",
+      "id": "1",
       "description":"Hold the pull up bar in an overhand grip with your hands at least shoulder width apart. Allow your body to hang straight under the bar. Engage your core and use your biceps to pull yourself up until your chest is level with the bar. Hold for a second before you lower yourself back down to the starting position. Do at least 10 pull ups with three sets, taking a 15 second break in between each set as needed."
     },
     {
       "name":"chin up",
       "type":"upper body",
+      "id": "2",
       "description":"Grab the chin up bar with an underhand grip with your hands shoulder width apart. Engage your core and use your arm strength to pull yourself up until your chin is over the bar. Make sure your elbows are tucked to your sides throughout the exercise. Pause at the top, and then lower your body back down until your arms are straight. Do at least eight of these per set for a total of three sets.Take a 15-25 second break in between sets as needed. The under hand grip will emphasize more of the lower lat muscles over the upper lats. To feel the lower lats even more, try angling the upper body back as you pull your body up to the bar. Mr. Olympia Samir Bannout likes doing the chin-up exercise like this using a V bar handle and angling the upper body until it is horizontal to the bar."
     },
     {
       "name":"bent over row",
       "type":"upper body",
+      "id": "3",
       "description":"Stand with your feet no further than hip width apart. Hold the dumbbells or barbell in an overhand grip so that your hands are just outside your legs.  Bend slightly at the knees and then bend forward, making sure to keep your shoulder blades back and your lower back arched and flexed. Engage your core so you keep your back straight. Using the barbell, start below your knee and in a smooth motion, and leading with your elbows, bring the weight up to your upper abdominals. Keep the elbows held wide to emphasize the lat muscles in your upper back."
     },
     {
       "name":"dumbbell shrug",
       "type":"upper body",
+      "id": "4",
       "description":"Stand tall and hold the dumbbells at your sides, palms facing each other. Bend slightly in a squat position until the dumbbells are level with your knees. In an explosive motion, propel yourself upward and shrug your shoulders and back hard at the top. Move back into the starting position to complete your reps. Do 10 reps and three sets with the lighter weights. Once you level up, do eight reps per set. Take a 15 – 30 second break in between each set as needed."
     },
     {
       "name":"diamond press up",
       "type":"upper body",
+      "id": "5",
       "description":"Start with your toes and hands on the floor or mat under you. Your body should be straight from toes to shoulders, and your arms should be straight. Put your hands close enough together that you are able to form a diamond shape with your thumbs and index fingers. Keep your hips up and make sure to engage your core so your back stays straight. Lower yourself down towards the floor, bending at the elbow. Push up from the floor until you’ve reached the starting position. See if you can do 10 reps and at least three sets. If you need a break between sets, take no more than 30 seconds before you start your next set. To make the exercise more difficult, point the elbows out to stress the triceps muscles more."
     },
     {
       "name":"dips",
       "type":"upper body",
+      "id": "6",
       "description":"If you are using a dip station or bars, grab the bars so that your palms are facing in and your arms are straight. Cross your ankles and make sure you are keeping your elbows tucked to your sides throughout the exercise.  If you are using a bench or chair, sit with your back to the bench and grab the edge with your hands. Your palms should be on the top of the bench and your fingers on the bottom. Put your feet together with your backside level with the bench or chair.  Make sure you stop so that your butt does not touch the ground while doing the exercise. Slowly lower your body down until your elbows are at a 90° angle. Push yourself back up to the starting position and repeat. Do 10-15 reps per set and get in at least three sets. Take a 30 – 45 second rest between sets if needed."
     },
     {
       "name":"incline dumbbell press",
       "type":"upper body",
+      "id": "7",
       "description":"Sit down and lay back on the incline bench with dumbbells in hand with your palms facing forward and the dumbbells at your shoulders. In a smooth motion, press the dumbbells overhead until your arms are straight. Hold at the top for a second, and then lower the dumbbells back down again to the starting position. Repeat for at least 10 reps per set with a total of at least three sets. Take a 30-60 second break if needed between sets."
     },
 
     {
       "name":"dumbbell triceps extension",
       "type":"upper body",
+      "id": "8",
       "description": "Stand up straight or sit down on a bench holding a dumbbell in both hands. Engage your core and keep your elbows pointed up throughout the exercise. Begin by slowly lowering the weight down behind the head. Hold for a second and then move back to the start position. Repeat for 10 reps and go for at least three sets. Take a break of no more than 30 seconds between sets if needed."
     },
     {
       "name":"tricep dumbbell kickback",
       "type":"upper body",
+      "id": "9",
       "description": "Stand with a dumbbell in one hand and bend at the waist so you can rest your free hand on a bench or other flat surface for stability. Start with your elbow bent at a 90° angle and raise the dumbbell back until your arm is straight behind you. Lower back to the starting position and repeat. Do at least 12 reps and three sets, with a 30 second break in between as needed. For a greater peak contraction of the triceps muscles at the completion of the exercise, try raising the dumbbells at a 45 degree angle instead of straight out horizontally."
     },
     {
       "name":"barbell bicep curl",
       "type":"upper body",
+      "id": "10",
       "description":"Stand with your feet hip width apart. Hold a barbell with your palms facing up. Starting with the barbell at your thighs, using a smooth and steady motion to raise up the barbell until the biceps muscles are fully contracted. Hold it there for a second before you lower back to the starting position. Repeat for 10 – 12 reps and do at least three sets of this exercise. Take a 15 – 30 second rest between sets if needed. For best results, be sure to keep the elbows glued to your sides and the chest held high throughout the exercise. This will place more emphasis on the biceps and keep the shoulder muscles out of the movement."
     },
     {
       "name":"Dumbbell Bicep Curl",
       "type":"upper body",
+      "id": "11",
       "description":"Stand holding a dumbbell with palms facing up at hip level, with your feet hip width apart. Use your bicep muscle to raise up the dumbbells until they reach your shoulder. Pause, and then slowly lower the dumbbells back down to the starting position. Repeat for 8 – 10 reps and go for at least three sets. If you need a break between sets, take up to 30 seconds before you begin your next set. For a greater peak contraction in the biceps, begin the exercise with the palms facing the thighs and slowly turn the wrist up as you curl the dumbbells."
     },
     {
       "name":"front squat",
       "type":"lower body",
+      "id": "12",
       "description":"Set a barbell on a power rack at about shoulder height. Grab the power with an overhand grip at shoulder width and raise your elbows until your upper arms are parallel to the floor. Take the bar out of the rack and let it rest on your fingertips. Your elbows should be all the way up throughout the movement. Step back and set your feet at shoulder width with toes turned out slightly. Squat as low as you can without losing the arch in your lower back."
     },
     {
       "name":"bulgarian split squat",
       "type":"lower body",
+      "id": "13",
       "description":"Stand lunge-length in front of a bench. Hold a dumbbell in each hand and rest the top of your left foot on the bench behind you. Lower your body until your rear knee nearly touches the floor and your front thigh is parallel to the floor. Single-leg training can yield serious strength gains. "
     },
     {
       "name":"romanian deadlift",
       "type":"lower body",
+      "id": "14",
       "description":"A killer deadlift variation, hold a barbell with a shoulder-width grip and stand with feet hip-width apart. Bend your hips back as far as you can. Allow your knees to bend as needed while you lower the bar along your shins until you feel a stretch in your hamstrings. Keep your lower back in its natural arched position throughout."
     }
   ]

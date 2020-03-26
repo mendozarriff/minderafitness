@@ -103,13 +103,38 @@ p.list_item_description{
 .list_item_description{
   
   white-space: nowrap; 
-  width: 50%;
+
   overflow: hidden;
   text-overflow: ellipsis;
 }
-@media only screen and (min-width: 500px){
+
+.list_item_description_container{
+  width: 50%;
+}
+
+.main_body{
+  max-width: 1200px;
+  margin: auto;
+}
+
+.workout ul{
+  text-align: left;
+}
+@media only screen and (min-width: 750px){
   .navbar_list{
     display: flex;
+  }
+
+  .main_body{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-evenly;
+  }
+
+  .list{
+    width: 68%;
+    height: 600px;
+    overflow: scroll;
   }
 }
 
