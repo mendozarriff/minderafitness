@@ -3,6 +3,7 @@ import { Container, Button } from 'react-bootstrap';
 import Navbar from './Navbar';
 import {Link,useRouteMatch, withRouter} from "react-router-dom";
 import workouts from '../api/workouts';
+import checkmark from './images/selected.png';
 import _ from 'lodash';
 
 
@@ -17,7 +18,9 @@ class Home extends React.Component{
       filter : 'all',
       workoutsSelected : selectedWorkouts ? selectedWorkouts : [],
       checkedItems: [],
-      checked: checkedWorkouts ? checkedWorkouts : {}
+      checked: checkedWorkouts ? checkedWorkouts : {},
+      pickedButton: "Pick Workout",
+      buttonStatus: { background: 'grey', color: '#f2f2f2'}
     }
 
     this.links = this.links.bind(this);
@@ -47,7 +50,8 @@ class Home extends React.Component{
   handleChange(e){
     if(e.target.checked){
       this.setState({
-        checked:{...this.state.checked, [e.target.name] : e.target.value}
+        checked:{...this.state.checked, [e.target.name] : e.target.value},
+        buttonStatus: {background: "#00cc00", color:"#003300"}
       })
     }else{
       this.setState({
@@ -124,12 +128,15 @@ class Home extends React.Component{
                 <div className="list_item_image">
 
                 </div>
-                <input  onClick={this.selectWorkout} 
+                <label className={this.state.checked[`${workout.id}_${workout.type}`] === workout.name ? "workout_button selected_workout" : "workout_button unselected_workout"}>
+                {this.state.checked[`${workout.id}_${workout.type}`] === workout.name? <img className="checkmark_img" src={checkmark} alt="" />  : <p>PICK WORKOUT</p>}
+                  <input  onClick={this.selectWorkout} 
                         name={`${workout.id}_${workout.type}`} 
                         onChange={this.handleChange} 
                         checked={this.state.checked[`${workout.id}_${workout.type}`] === workout.name}  
                         type="checkbox" 
                         value={workout.name}/>
+                </label>
               </div>
           </Container> : "" )}
         {/* all workouts are displayed by default */}
@@ -146,12 +153,16 @@ class Home extends React.Component{
               <div className="list_item_image">
 
               </div>
-              <input  onClick={this.selectWorkout} 
+              <label className={this.state.checked[`${workout.id}_${workout.type}`] === workout.name ? "workout_button selected_workout" : "workout_button unselected_workout"} > 
+              {/* Pick<br />Workout */}
+              {this.state.checked[`${workout.id}_${workout.type}`] === workout.name? <img className="checkmark_img" src={checkmark} alt="" /> : <p>PICK WORKOUT</p>}
+                <input  onClick={this.selectWorkout} 
                       name={`${workout.id}_${workout.type}`}  
                       onChange={this.handleChange} 
                       checked={this.state.checked[`${workout.id}_${workout.type}`] === workout.name} 
                       type="checkbox" 
                       value={workout.name}/>
+              </label>
             </div>
           </Container>) : ""}     
           </div>
