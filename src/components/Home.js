@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Button } from 'react-bootstrap';
 import Navbar from './Navbar';
-import {Link,useRouteMatch} from "react-router-dom";
+import {Link,useRouteMatch, withRouter} from "react-router-dom";
 import workouts from '../api/workouts';
 import _ from 'lodash';
 
@@ -42,11 +42,6 @@ class Home extends React.Component{
       const workouts = this.state.workoutsSelected.filter(workout => workout !== e.target.value )
       this.setState({workoutsSelected:workouts})
     }
-
-    // console.log('currently in workoutsSelected state: ', this.state.workoutsSelected)
-    // localStorage.setItem('selectedWorkouts',JSON.stringify(this.state.workoutsSelected))
-    
-    
   }
 
   handleChange(e){
@@ -62,20 +57,14 @@ class Home extends React.Component{
     
   }
 
-  componentDidMount(){
-    // const selectedWorkouts = JSON.parse(sessionStorage.getItem('selectedworkouts'));
-    // this.setState({checked: selectedWorkouts})
-    // console.log(typeof selectedWorkouts)
-  }
-
   clearWorkouts(){
     this.setState({
       workoutsSelected:[],
       checked: {}
     });
 
-    sessionStorage.setItem('checkedWorkouts','')
-    sessionStorage.setItem('selectedWorkouts','')
+    sessionStorage.removeItem('checkedWorkouts','')
+    sessionStorage.removeItem('selectedWorkouts','')
   }
 
   handleSubmit(e){
@@ -86,7 +75,7 @@ class Home extends React.Component{
     if(this.state.workoutsSelected.length > 0){
       sessionStorage.setItem('checkedWorkouts',JSON.stringify(this.state.checked))
       sessionStorage.setItem('selectedWorkouts',JSON.stringify(this.state.workoutsSelected))
-      window.location.href = "/workout";
+      this.props.history.push("/workout");
     }else{
       alert('you have not selected any workouts')
     }
@@ -104,7 +93,7 @@ class Home extends React.Component{
   }
 
   render(){
-    
+    console.log('checked: ',this.state.checked);
     const title = "choose body part";
     const allWorkouts = workouts.all;
     return(
@@ -173,14 +162,12 @@ class Home extends React.Component{
               {this.state.workoutsSelected.length > 0 ? this.state.workoutsSelected.map(function(workout,index){
                 return <li key={index}>{workout}</li>
               })  : <li>You have not selected any workout</li> }
-              {/* {this.state.checkedItems ? console.log(this.state.checkedItems) : <li>You have not selected any workout</li> } */}
+
              
               </ul>
             </Container>
             
             <button>Start Workout</button>
-            {/* <button>C</button> */}
-            {/* <Link to="/workout">Start</Link> */}
           </div>
         </form>
           
@@ -192,4 +179,5 @@ class Home extends React.Component{
   }
 }
 
-export default Home;
+// export default Home;
+export default withRouter(Home)
