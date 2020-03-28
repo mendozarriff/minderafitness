@@ -23,10 +23,10 @@ function Navbar({title,links}){
 
 }
 
-Navbar.propTypes={
-  title: PropTypes.string.isRequired,
-  links: PropTypes.func.isRequired,
+// Navbar.propTypes={
+//   title: PropTypes.string.isRequired,
+//   links: PropTypes.func.isRequired,
 
-}
+// }
 
 export default Navbar;
