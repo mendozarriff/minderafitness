@@ -10,6 +10,9 @@ import fullbody from './images/fullbody_logo.png'
 import down_arrow from './images/down.png';
 import _ from 'lodash';
 import * as Scroll from 'react-scroll';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { CSSTransition } from 'react-transition-group';
 
 
 class Home extends React.Component{
@@ -26,7 +29,10 @@ class Home extends React.Component{
       checked: checkedWorkouts ? checkedWorkouts : {},
       pickedButton: "Pick Workout",
       buttonStatus: { background: 'grey', color: '#f2f2f2'},
-      scrollToDiv: 0
+      scrollToDiv: 0,
+      mobileWorkoutList: false,
+      filterBg:"",
+      faAngle : faAngleUp
       
     }
 
@@ -36,19 +42,14 @@ class Home extends React.Component{
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.clearWorkouts = this.clearWorkouts.bind(this);
-    this.scrollDown = this.scrollDown.bind(this);
     this.myRef = React.createRef() 
-    this.scroll = Scroll.animateScroll; 
-    this.trackScroll = this.trackScroll.bind(this)
-    // this.scrollTo = this.scrollTo.bind(this)
+    this.scroll = Scroll.animateScroll;
+    this.displayWorkouts = this.displayWorkouts.bind(this)
   }
 
   switchWorkout(e){
     this.setState({filter:e.target.dataset.workout})
   }
-  // scrollToMyRef = () => window.scrollTo(0, this.myRef.current.offsetTop)   
-  
-
 
   selectWorkout(e){
     if(e.target.checked){
@@ -60,42 +61,6 @@ class Home extends React.Component{
       const workouts = this.state.workoutsSelected.filter(workout => workout !== e.target.value )
       this.setState({workoutsSelected:workouts})
     }
-  }
-
-  scrollTo(size){
-    // console.log(size.length);
-    if(this.state.scrollToDiv < size.length - 8){
-      this.setState({
-          scrollToDiv: this.state.scrollToDiv + 4
-        });
-    }
-    // this.setState({
-    //   scrollToDiv: this.state.scrollToDiv + 4
-    // });
-  }
-
-  trackScroll(){
-    console.log('test')
-  }
-
-  scrollDown(){
-    // const scrollto = this.myRef.current.scrollTop;
-    // this.scroll.scrollToTop(this.myRef.current.scrollTop);
-    this.myRef.current.scrollTop += 250; 
-    this.scroll.scrollMore(500);
-  
-    // console.log(this.scroll);
-    // const topPos = this.myRef.current.offsetTop;
-    // console.log(topPos)
-
-    // this.myRef.scrollTop = '43';
-    
-    // console.log('test');
-    // this.scrollToMyRef()
-    // this.myRef.current.offsetTop = this.myRef.current.offsetTop + 100
-    // console.log(this.myRef.current.offsetTop + 100)
-    // window.scrollDown()
-    // console.log(this.myRef.current)
   }
 
   handleChange(e){
@@ -130,19 +95,37 @@ class Home extends React.Component{
     if(this.state.workoutsSelected.length > 0){
       sessionStorage.setItem('checkedWorkouts',JSON.stringify(this.state.checked))
       sessionStorage.setItem('selectedWorkouts',JSON.stringify(this.state.workoutsSelected))
-      this.props.history.push("/workout");
+      
+      setTimeout(
+        function() {
+          this.props.history.push("/workout");
+          this.props.addFilterBg("");
+        }
+        .bind(this),
+        500
+    );
+      
     }else{
       alert('you have not selected any workouts')
     }
   }
 
+  displayWorkouts(){
+    this.setState({
+      mobileWorkoutList: !this.state.mobileWorkoutList,
+      filterBg:this.state.filterBg === "" ? 'blur(10px)' : "",
+      faAngle : this.state.faAngle ===  faAngleUp ? faAngleDown : faAngleUp 
+    })
+    this.props.addFilterBg(this.state.filterBg === "" ? 'blur(10px)' : "")
+  }
+
   links(){
     return (
       <React.Fragment>
-        <li className="bodyfocus_link"><img data-workout='upper body' onClick={this.switchWorkout} className="upperbody_img" src={upperbody} alt=""/></li>
-        <li className="bodyfocus_link" ><img data-workout='lower body' onClick={this.switchWorkout} className="lowerbody_img" src={lowerbody} alt=""/></li>
+        <li className={this.state.filter === "upper body" ? "bodyfocus_link change_bg" : "bodyfocus_link" }><img data-workout='upper body' onClick={this.switchWorkout} className="upperbody_img" src={upperbody} alt=""/></li>
+        <li className={this.state.filter === "lower body" ? "bodyfocus_link change_bg" : "bodyfocus_link" } ><img data-workout='lower body' onClick={this.switchWorkout} className="lowerbody_img" src={lowerbody} alt=""/></li>
         <li className="bodyfocus_link"><img className="fullbody_img" src={fullbody} alt=""/></li>
-        <li className="bodyfocus_link all" data-workout='all' onClick={this.switchWorkout}>ALL</li>
+        <li className={this.state.filter === "all" ? "bodyfocus_link all change_bg" : "bodyfocus_link all" } data-workout='all' onClick={this.switchWorkout}>ALL</li>
       </React.Fragment>
 
      
@@ -150,28 +133,28 @@ class Home extends React.Component{
   }
 
   render(){
-
-     /* <React.Fragment>
-        <li data-workout='upper body' className="bodyfocus_link" onClick={this.switchWorkout}><img className="upperbody_img" src={upperbody} alt=""/></li>
-        <li data-workout='lower body' className="bodyfocus_link" onClick={this.switchWorkout}><img className="lowerbody_img" src={lowerbody} alt=""/></li>
-        <li className="bodyfocus_link"><img className="fullbody_img" src={fullbody} alt=""/></li>
-        <li className="bodyfocus_link all" data-workout='all' onClick={this.switchWorkout}>ALL</li>
-      </React.Fragment> */
-    console.log('checked: ',this.state.checked);
+  
     const title = "choose body part";
     const allWorkouts = workouts.all;
     return(
       <div>
-      <Navbar title={title} links={this.links} /> 
+      <Navbar filterBg={this.state.filterBg}  title={title} links={this.links} /> 
       <div className="main">
-        <div className="main_title">
+        <div className="main_title" style={{filter:this.state.filterBg}}>
           <h2>Choose Exercise</h2>
+          <div>
+          
           <button onClick={this.clearWorkouts}>Clear All</button>
+          </div>
+          
         </div>
  
         <div className="main_body_container">
+        
+        <p className="text-center text-uppercase filter_text" style={{filter: this.state.filterBg}}>{this.state.filter}</p>
+       
         <form className="main_body" onSubmit={this.handleSubmit}>
-        <div className="list_container">
+        <div className="list_container" style={{filter:this.state.filterBg}}>
 
         <div className="list" ref={this.myRef}> 
           {/* workouts are filtered when filter state changes.  the state is set in the switchWorkout function */}
@@ -218,7 +201,7 @@ class Home extends React.Component{
               <label className={this.state.checked[`${workout.id}_${workout.type}`] === workout.name ? "workout_button selected_workout" : "workout_button unselected_workout"} > 
               {/* Pick<br />Workout */}
               {this.state.checked[`${workout.id}_${workout.type}`] === workout.name? <img className="checkmark_img" src={checkmark} alt="" /> : <p>PICK WORKOUT</p>}
-                <input  onClick={this.selectWorkout} 
+                <input onClick={this.selectWorkout} 
                       name={`${workout.id}_${workout.type}`}  
                       onChange={this.handleChange} 
                       checked={this.state.checked[`${workout.id}_${workout.type}`] === workout.name} 
@@ -228,18 +211,37 @@ class Home extends React.Component{
             </div>
           </Container>) : ""}     
           </div>
-          {/* <div className="mobile_abso_pos">
-            <div className="scroll_down">
-              <button type="button" onClick={this.scrollDown}><img src={down_arrow} alt=""/></button>
+
+          </div>
+            {this.state.workoutsSelected.length > 0 ? <div className={this.state.mobileWorkoutList ? "num_of_items_checked pull_up" : "num_of_items_checked"}>
+            <div onClick={this.displayWorkouts} >
+              <FontAwesomeIcon className="angle_arrow" size="2x" icon={this.state.faAngle} />
               
             </div>
-          </div> */}
-          </div>
-          {/* <div className="mobile_fixed_pos"> */}
-            {/* <div className="scroll_down">
-              <button type="button"><img src={down_arrow} alt=""/></button>
-            </div> */}
-            {this.state.workoutsSelected.length > 0 ? <div className="num_of_items_checked"><p>Number of workouts picked: {this.state.workoutsSelected.length}</p><p>View Workouts</p></div> : ""}
+            
+            <p className="workout_counter">
+           
+              {this.state.workoutsSelected.length}
+            
+            </p>
+              
+              
+            <div class="mobile_picked_list">
+              <Container>
+                <h2>YOUR WORKOUT</h2>
+                <ul>
+                {this.state.workoutsSelected.length > 0 ? this.state.workoutsSelected.map(function(workout,index){
+                  return <li style={{textTransform:"capitalize"}} key={index}>{workout}</li>
+                })  : <p style={{textAlign:"center"}}>You have not selected any workout</p> }
+
+              
+                </ul>
+                <button className="ripple">Start Workout</button>
+              </Container>
+              
+              
+            </div>
+            </div> : ""}
             <div className="workout">
               <Container>
                 <h2>Your Workout</h2>

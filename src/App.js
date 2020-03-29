@@ -12,25 +12,42 @@ import {
   Route
 } from "react-router-dom";
 
-function App() {
+class App extends React.Component {
 
-  
+  constructor(props){
+    super(props)
+
+    this.state = {
+      filterBg:''
+    }
+  }
+
+  addFilterBg = (value) => {
+    this.setState({
+      filterBg: value
+    })
+  }
+render(){
+
   return (
     <Router>
     <div className="App">
-      <Header logo={logo}/>
+      <Header addFilterBg={this.state.filterBg} logo={logo}/>
       <Switch>
       <Route path='/workout'>
         <Workout />
       </Route>
       <Route path='/'>
-      <Home />
+      <Home addFilterBg={this.addFilterBg} />
       </Route>
       </Switch>
-      <Footer />
+      <Footer addFilterBg={this.state.filterBg}/>
     </div>
     </Router>
   );
+}
+  
+  
 }
 
 export default App;

@@ -2,9 +2,11 @@ import React from 'react';
 import { Container } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-function Navbar({title,links}){
+function Navbar({title,filterBg,links}){
+
     return(
-      <div className="navbar" style={{background: "#D8D8D8"}}>
+      // <div className="navbar" style={{background: "#D8D8D8", filter: this.state.filterBg}}>
+      <div className="navbar" style={{background: "#D8D8D8", filter: filterBg}}>
         <Container>
         <h2>{title}</h2>
         <div className="navbar_list">
@@ -20,6 +22,8 @@ function Navbar({title,links}){
         </Container>
       </div>
     )
+
+    
 
 }
 
