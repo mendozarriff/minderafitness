@@ -1,6 +1,8 @@
 import React from 'react';
 import { Container, Button } from 'react-bootstrap';
 import Navbar from './Navbar';
+import WorkoutInfoModal from './WorkoutInfoModal'
+
 import {Link,useRouteMatch, withRouter} from "react-router-dom";
 import workouts from '../api/workouts';
 import checkmark from './images/selected.png';
@@ -11,8 +13,9 @@ import down_arrow from './images/down.png';
 import _ from 'lodash';
 import * as Scroll from 'react-scroll';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faAngleUp, faAngleDown, faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { CSSTransition } from 'react-transition-group';
+import gifs from './images/gifs/pull_up.gif';
 
 
 class Home extends React.Component{
@@ -32,8 +35,8 @@ class Home extends React.Component{
       scrollToDiv: 0,
       mobileWorkoutList: false,
       filterBg:"",
-      faAngle : faAngleUp
-      
+      faAngle : faAngleUp,
+      rotate: ""
     }
 
     this.links = this.links.bind(this);
@@ -44,11 +47,12 @@ class Home extends React.Component{
     this.clearWorkouts = this.clearWorkouts.bind(this);
     this.myRef = React.createRef() 
     this.scroll = Scroll.animateScroll;
-    this.displayWorkouts = this.displayWorkouts.bind(this)
+    this.displayWorkouts = this.displayWorkouts.bind(this);
   }
 
   switchWorkout(e){
     this.setState({filter:e.target.dataset.workout})
+    
   }
 
   selectWorkout(e){
@@ -114,7 +118,8 @@ class Home extends React.Component{
     this.setState({
       mobileWorkoutList: !this.state.mobileWorkoutList,
       filterBg:this.state.filterBg === "" ? 'blur(10px)' : "",
-      faAngle : this.state.faAngle ===  faAngleUp ? faAngleDown : faAngleUp 
+      faAngle : this.state.faAngle ===  faAngleUp ? faAngleDown : faAngleUp,
+      rotate: this.state.rotate === "" ? "rotate" : ""
     })
     this.props.addFilterBg(this.state.filterBg === "" ? 'blur(10px)' : "")
   }
@@ -122,7 +127,8 @@ class Home extends React.Component{
   links(){
     return (
       <React.Fragment>
-        <li className={this.state.filter === "upper body" ? "bodyfocus_link change_bg" : "bodyfocus_link" }><img data-workout='upper body' onClick={this.switchWorkout} className="upperbody_img" src={upperbody} alt=""/></li>
+      {/* <img data-workout='upper body' onClick={this.switchWorkout} className={this.state.filter === "upper body" ? "upperbody_img bodyfocus_link change_bg" : "upperbody_img bodyfocus_link" } src={upperbody} alt=""/> */}
+        <li className={this.state.filter === "upper body" ? "upperbody_img bodyfocus_link change_bg" : "upperbody_img bodyfocus_link" }><img data-workout='upper body' onClick={this.switchWorkout} className="upperbody_img" src={upperbody} alt=""/></li>
         <li className={this.state.filter === "lower body" ? "bodyfocus_link change_bg" : "bodyfocus_link" } ><img data-workout='lower body' onClick={this.switchWorkout} className="lowerbody_img" src={lowerbody} alt=""/></li>
         <li className="bodyfocus_link"><img className="fullbody_img" src={fullbody} alt=""/></li>
         <li className={this.state.filter === "all" ? "bodyfocus_link all change_bg" : "bodyfocus_link all" } data-workout='all' onClick={this.switchWorkout}>ALL</li>
@@ -133,13 +139,18 @@ class Home extends React.Component{
   }
 
   render(){
-  
+    
     const title = "choose body part";
-    const allWorkouts = workouts.all;
+    const allWorkouts = _.orderBy(workouts.all,['name'],['asc']);
+    // console.log('not filtered',allWorkouts)
+
+    // console.log('filtered workouts: ',);
     return(
       <div>
+      <div className={`workout_modal_overlay ${this.props.workoutModalOverlay}`}></div>
       <Navbar filterBg={this.state.filterBg}  title={title} links={this.links} /> 
       <div className="main">
+      
         <div className="main_title" style={{filter:this.state.filterBg}}>
           <h2>Choose Exercise</h2>
           <div>
@@ -151,30 +162,44 @@ class Home extends React.Component{
  
         <div className="main_body_container">
         
-        <p className="text-center text-uppercase filter_text" style={{filter: this.state.filterBg}}>{this.state.filter}</p>
+        {/* <p className="text-center text-uppercase filter_text" style={{filter: this.state.filterBg}}>{this.state.filter}</p> */}
        
         <form className="main_body" onSubmit={this.handleSubmit}>
         <div className="list_container" style={{filter:this.state.filterBg}}>
-
-        <div className="list" ref={this.myRef}> 
+        <p className="text-center text-uppercase filter_text" style={{filter: this.state.filterBg}}>{this.state.filter}</p>
+        <div className="list" ref={this.myRef}>
+        <WorkoutInfoModal 
+          modalWorkoutName={this.props.modalWorkoutName} 
+          modalWorkoutDescription={this.props.modalWorkoutDescription}
+          modalWorkoutGif={this.props.modalWorkoutGif}
+          workoutModalOverlay={this.props.workoutModalOverlay}
+          workoutModal={this.props.workoutModal}
+          closeModal={this.props.closeModal}
+           />
           {/* workouts are filtered when filter state changes.  the state is set in the switchWorkout function */}
           {allWorkouts.map((workout, index) => workout.type == this.state.filter ? 
+         
             <Container key={index}> 
+            
               <div className="list_item" id={`${index}_list`}>
-                <p className="list_item_title">{workout.name}</p>
+                <div className="list_item_title_container">
+                  <p className="list_item_title">{workout.name}</p>
+                </div>
+                
                 <div className="list_item_description_container">
                 <p className="list_item_description">
                 {workout.description}
                 
                 </p>
-                <a href="#">Learn More</a>
+                {/* <a onClick={this.openModal.bind(this,workout.name, workout.description, workout.gif )}>Learn More</a> */}
+                <a onClick={this.props.openModal.bind(this,workout.name, workout.description, workout.gif )}>Learn More</a>
                 </div>
                 
                 <div className="list_item_image">
 
                 </div>
                 <label className={this.state.checked[`${workout.id}_${workout.type}`] === workout.name ? "workout_button selected_workout" : "workout_button unselected_workout"}>
-                {this.state.checked[`${workout.id}_${workout.type}`] === workout.name? <img className="checkmark_img" src={checkmark} alt="" />  : <p>PICK WORKOUT</p>}
+                {this.state.checked[`${workout.id}_${workout.type}`] === workout.name ? <FontAwesomeIcon style={{color:'green'}} size="2x" icon={faCheckCircle} />  :<FontAwesomeIcon size="2x" icon={faCheckCircle} />}
                   <input  onClick={this.selectWorkout} 
                         name={`${workout.id}_${workout.type}`} 
                         onChange={this.handleChange} 
@@ -188,19 +213,23 @@ class Home extends React.Component{
         {this.state.filter == 'all'? allWorkouts.map((workout,index) => 
           <Container key={index}> 
             <div className="list_item" id={`${index}_list`}>
+            <div className="list_item_title_container">
               <p className="list_item_title">{workout.name}</p>
+            </div>
+              
               <div className="list_item_description_container">
               <p className="list_item_description">
               {workout.description}
               </p>
-              <a href="#">Learn More</a>
+              {/* <a onClick={this.openModal.bind(this,workout.name, workout.description, workout.gif )}>Learn More</a> */}
+              <a onClick={this.props.openModal.bind(this,workout.name, workout.description, workout.gif )}>Learn More</a>
               </div>
               <div className="list_item_image">
 
               </div>
               <label className={this.state.checked[`${workout.id}_${workout.type}`] === workout.name ? "workout_button selected_workout" : "workout_button unselected_workout"} > 
               {/* Pick<br />Workout */}
-              {this.state.checked[`${workout.id}_${workout.type}`] === workout.name? <img className="checkmark_img" src={checkmark} alt="" /> : <p>PICK WORKOUT</p>}
+              {this.state.checked[`${workout.id}_${workout.type}`] === workout.name? <FontAwesomeIcon style={{color:'green'}} size="2x" icon={faCheckCircle} /> : <FontAwesomeIcon size="2x" icon={faCheckCircle} />}
                 <input onClick={this.selectWorkout} 
                       name={`${workout.id}_${workout.type}`}  
                       onChange={this.handleChange} 
@@ -211,11 +240,11 @@ class Home extends React.Component{
             </div>
           </Container>) : ""}     
           </div>
-
+            <p className="list_footer"></p>
           </div>
             {this.state.workoutsSelected.length > 0 ? <div className={this.state.mobileWorkoutList ? "num_of_items_checked pull_up" : "num_of_items_checked"}>
             <div onClick={this.displayWorkouts} >
-              <FontAwesomeIcon className="angle_arrow" size="2x" icon={this.state.faAngle} />
+              <FontAwesomeIcon className={`angle_arrow ${this.state.rotate}`} size="2x" icon={faAngleUp} />
               
             </div>
             
@@ -226,7 +255,7 @@ class Home extends React.Component{
             </p>
               
               
-            <div class="mobile_picked_list">
+            <div className="mobile_picked_list">
               <Container>
                 <h2>YOUR WORKOUT</h2>
                 <ul>
@@ -236,7 +265,7 @@ class Home extends React.Component{
 
               
                 </ul>
-                <button className="ripple">Start Workout</button>
+                <button className="ripple">View Workout</button>
               </Container>
               
               
@@ -254,7 +283,7 @@ class Home extends React.Component{
                 </ul>
               </Container>
               
-              <button>Start Workout</button>
+              <button>View Workout</button>
             </div>
           {/* </div> */}
         </form>
