@@ -314,12 +314,13 @@ p.list_item_description{
     /* right: 20px;
     left: 20px; */
     
-    background: white;
+    background: #161616;
     z-index: 2;
     /* display: none; */
     /* opacity: 0; */
     /* visibility: hidden; */
     border-radius: 25px;
+    color: white;
     
     
     
@@ -438,7 +439,7 @@ p.list_item_description{
     width: 100%;
     justify-content: center;
     align-items: center;
-    background: #f2f2f2;
+    background: black;
     border-radius: 25px 25px 0 0;
 }
 
@@ -743,7 +744,7 @@ width: 100%;
 }
 
 .ripple.blk:hover {
-  background: transparent radial-gradient(circle, transparent 1%, rgba(0,0,0, 0.9) 1%) center/15000%;
+  background: white radial-gradient(circle, transparent 1%, rgba(0,0,0, 0.9) 1%) center/15000%;
   outline: none;
   /* color: black; */
 }

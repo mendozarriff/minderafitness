@@ -19,6 +19,7 @@ constructor(props){
   // gets the values from session storage picked on Home component if it exists and sets them to state, if it doesn't then the value is an empty object 
   const checkedWorkouts = sessionStorage.getItem('checkedWorkouts') ? JSON.parse(sessionStorage.getItem('checkedWorkouts')) : {};
   const workoutKeys = checkedWorkouts ? Object.keys(checkedWorkouts) : {};
+  const filledWorkouts = sessionStorage.getItem('filledWorkouts') ? JSON.parse(sessionStorage.getItem('filledWorkouts')) : [];
 
   this.state = {
     checkedWorkouts,
@@ -32,13 +33,15 @@ constructor(props){
     reps: 0,
     sets: 0,
     weight: 0,
+    currentInputValue: 0,
     weights: {},
     allReps: {},
     allSets: {},
-    allWorkouts: [],
+    allWorkouts: filledWorkouts ? filledWorkouts : [],
     displayOverlay: '',
     tooltip: '',
-    allTooltips: {}
+    allTooltips: {},
+
 
   }
 
@@ -53,6 +56,8 @@ constructor(props){
   this.handleBlur = this.handleBlur.bind(this);
   this.handleWorkoutSubmit = this.handleWorkoutSubmit.bind(this)
   this.handleWorkoutsSubmit = this.handleWorkoutsSubmit.bind(this);
+  this.handleFocus = this.handleFocus.bind(this)
+  // this.handleFocus = this.handleFocus.bind(this)
 }
 
 openSetsModal(workoutName, workoutID){
@@ -69,6 +74,10 @@ openSetsModal(workoutName, workoutID){
     reps: this.state.allReps[name] ? this.state.allReps[name] : 0,
     
   })
+}
+
+handleFocus(e){
+  e.target.value = '';
 }
 
 closeSetsModal(){
@@ -91,9 +100,10 @@ handleChange(e){
 
 handleBlur(e){
   const {name} = e.target;
+
   if(isNaN(this.state[name])){
     this.setState({
-      [name]: 0
+      [name]: 0 
     });
   }else{
     this.setState({
@@ -104,7 +114,6 @@ handleBlur(e){
 }
 
 decrease(num){
-  // console.log('test')
   this.setState({
     [num]: parseInt(this.state[num]) <= 0  ? Math.abs(this.state[num]) : parseInt(this.state[num]) - 1
   })
@@ -154,10 +163,6 @@ handleWorkoutSubmit(e){
       ...this.state.allTooltips,
       [selected]: this.state.tooltip
     }
-    // tooltip: this.state.allTooltips[selected] ? this.state.allTooltips[selected] : '',
-    
-    
-   
 }),600) 
 }
 
@@ -185,7 +190,12 @@ handleWorkoutsSubmit(e){
     ),4000);
     
   }else{
-    this.props.history.push("/todays-workout");
+    // console.log(this.state.allWorkouts);
+    // sessionStorage.setItem('filledWorkouts',JSON.stringify(this.state.allWorkouts))
+    console.log(editedWorkouts);
+    sessionStorage.setItem('filledWorkouts',JSON.stringify(editedWorkouts))
+    
+    // this.props.history.push("/todays-workout");
   }
 
 }
@@ -194,6 +204,48 @@ componentDidMount(){
   const workoutIDS = [];
   const workoutKeys = this.state.workoutKeys;
   const workoutsPicked = [];
+
+ const keys = [];
+ const reps = [];
+ const sets = [];
+ const weights = []
+ const ids = []
+ const sessionReps = {};
+ const sessionSets = {};
+ const sessionWeights = {};
+ const sessionworkoutSelectedID = {}
+// console.log(this.state.allWorkouts);
+  if(this.state.allWorkouts.length > 0){
+
+    this.state.allWorkouts.map(workout => {
+      keys.push(workout.id+"_"+workout.name);
+        reps.push(workout.reps)
+        sets.push(workout.sets)
+        weights.push(workout.weight)
+        ids.push(workout.id)
+    }
+      )
+
+      for(var i=0; i<keys.length; i++){
+        sessionReps[keys[i]] = reps[i];
+        sessionSets[keys[i]] = sets[i];
+        sessionWeights[keys[i]] = weights[i];
+        sessionworkoutSelectedID[keys[i]]   = ids[i]
+      }
+
+
+
+
+      this.setState({
+        allReps: sessionReps,
+        allSets: sessionSets,
+        weights: sessionWeights,
+        workoutSelectedID:sessionworkoutSelectedID
+      })
+
+}
+
+
 
   //gets all of the workout ids from the wokouts selected
   // value of a workoutKey: 1_upper body
@@ -215,7 +267,7 @@ componentDidMount(){
       }
     })
 
-    console.log('workoutsPicked',workoutsPicked)
+    // console.log('workoutsPicked',workoutsPicked)
     // sets the state workoutsPicked to be displayed on render() 
     this.setState({
       workoutsPicked
@@ -226,10 +278,16 @@ componentDidMount(){
 clearWorkouts(){
   this.setState({workoutsPicked:[]})
   this.setState({
-    checkedWorkouts:{}
-  })
+    checkedWorkouts:{},
+    allReps : {},
+    allSets: {},
+    weights:{},
+    workoutSelectedID:{}
+  });
+
   sessionStorage.removeItem('checkedWorkouts');
   sessionStorage.removeItem('selectedWorkouts');
+  sessionStorage.removeItem('filledWorkouts');
 }
 
 removeWorkout(id, type){
@@ -254,13 +312,15 @@ removeWorkout(id, type){
   this.setState({
     checkedWorkouts: filteredCheckedWorkouts,
     workoutsPicked:removeWorkoutList,
-    allWorkouts:removeWorkout
+    allWorkouts:removeWorkout,
   });
+
+
 
 
   sessionStorage.setItem('selectedWorkouts', JSON.stringify(workoutList));
   sessionStorage.setItem('checkedWorkouts', JSON.stringify(filteredCheckedWorkouts));
-
+  sessionStorage.setItem('filledWorkouts', JSON.stringify(removeWorkoutList));
 }
 
 links(){
@@ -300,7 +360,7 @@ displayWorkouts(){
   
       </div>
       <div className="tooltip-container">
-        <div className={`tooltip-text ${this.state.workoutSelectedID[`${workout.id}_${workout.name}`] === workout.id ? '' : this.state.tooltip }`}>Press Here</div>
+        <div className={`tooltip-text ${this.state.workoutSelectedID[`${workout.id}_${workout.name}`] === workout.id ? '' : this.state.tooltip }`}>Click Here</div>
         <p onClick={this.openSetsModal.bind(this, workout.name, workout.id)}>Sets / Reps</p>
        
       </div>
@@ -316,11 +376,14 @@ displayWorkouts(){
 }
 render(){
   const title = "upper body work";
-  // console.log('this.state.allTooltips: ',this.state.allTooltips)
-  // console.log('this.state.workoutSelectedID: ',this.state.workoutSelectedID)
-  // console.log('this.state.weights:', this.state.weights)
-  // const index = 0; 
-  // console.log(moment().format('MMMM Do YYYY, h:mm:ss a'))
+  const temp = JSON.parse(sessionStorage.getItem('filledWorkouts'))
+  // console.log(this.state.allReps)
+  // console.log(this.state.allSets)
+  // console.log(this.state.allWeights)
+  // console.log(sessionStorage.getItem('filledWorkouts'));
+  console.log('temp: ', temp)
+  console.log('allWorkouts: ', this.state.allWorkouts);
+ 
   return (
   
     <React.Fragment>
@@ -336,7 +399,7 @@ render(){
         <div className="set_modal_body">
           <div className="set_modal_body_inputs">
             <label htmlFor="weight">Weight:</label>
-              <input id="weight" type="text" name="weight" onBlur={this.handleBlur}  onChange={this.handleChange} 
+              <input id="weight" type="text" name="weight" onFocus={this.handleFocus} onBlur={this.handleBlur}  onChange={this.handleChange} 
               value={this.state.weight}/> 
             <div className="set_modal_body_btns">
               <span onClick={this.decrease.bind(this,'weight')}>-</span>
@@ -345,7 +408,7 @@ render(){
           </div>
           <div className="set_modal_body_inputs">
             <label htmlFor="sets">Sets: </label>
-            <input id="sets" type="text" name="sets" onBlur={this.handleBlur} onChange={this.handleChange} value={this.state.sets}/>
+            <input id="sets" type="text" name="sets" onFocus={this.handleFocus} onBlur={this.handleBlur} onChange={this.handleChange} value={this.state.sets}/>
             <div className="set_modal_body_btns">
               <span onClick={this.decrease.bind(this,'sets')}>-</span>
               <span onClick={this.increase.bind(this,'sets')}>+</span>
@@ -353,7 +416,7 @@ render(){
           </div>
           <div className="set_modal_body_inputs">
             <label htmlFor="reps">Reps:</label>
-              <input id="reps" type="text" name="reps" onBlur={this.handleBlur}  onChange={this.handleChange} value={this.state.reps}/>
+              <input id="reps" type="text" name="reps" onFocus={this.handleFocus} onBlur={this.handleBlur}  onChange={this.handleChange} value={this.state.reps}/>
             <div className="set_modal_body_btns">
               <span onClick={this.decrease.bind(this,'reps')}>-</span>
               <span onClick={this.increase.bind(this,'reps')}>+</span>
